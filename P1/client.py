@@ -1,8 +1,8 @@
 import paho.mqtt.client as mqtt
 
 MQTT_BROKER = "broker.mqttdashboard.com"
-MQTT_TOPIC_SEND = "exp.criativa/pcparaesp"
-MQTT_TOPIC_RECEIVE = "exp.criativa/espparapc"
+MQTT_TOPIC_SEND = "exp.criativa/pcparaesp2025"
+MQTT_TOPIC_RECEIVE = "exp.criativa/espparapc2025"
 
 # Callback executado quando uma mensagem MQTT é recebida
 def on_message(client, userdata, msg):
@@ -24,4 +24,6 @@ client.connect(MQTT_BROKER)
 client.subscribe(MQTT_TOPIC_RECEIVE)
 
 print("Esperando mensagens...")
-client.loop_forever()
+
+while True:
+    client.loop(timeout=0.1)
