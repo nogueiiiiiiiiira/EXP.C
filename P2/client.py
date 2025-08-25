@@ -1,23 +1,24 @@
 import paho.mqtt.client as mqtt
 from datetime import datetime
-import time
 
 MQTT_BROKER = "broker.mqttdashboard.com"
-MQTT_TOPIC_SEND = "exp.criativa/pcparaesp"
-MQTT_TOPIC_RECEIVE = "exp.criativa/espparapc"
+MQTT_TOPIC_SEND = "exp.criativa/pcparaesp2025"
+MQTT_TOPIC_RECEIVE = "exp.criativa/espparapc2025"
 
 # Callback executado quando uma mensagem MQTT é recebida
 def on_message(client, userdata, msg):
-    mensagem = msg.hora_minuto.decode()
-    print("Pedido recebido:", mensagem)
+    current_datetime = datetime.now()
+    horas = (current_datetime.hour)
+    minutos = (current_datetime.minute)
+    segundos = (current_datetime.second)
 
-    if mensagem == "hora":
-        agora = datetime.now()
-        hora = agora.hour
-        minuto = agora.minute
-        hora_minuto = f"{hora},{minuto}"
-        print("Enviando:", hora_minuto)
-        client.publish(MQTT_TOPIC_SEND, hora_minuto)
+    mensagem = msg.payload.decode()
+    print(f"Mensagem recebida no tópico")
+    
+    if mensagem == "hora":        
+        pedido = (f"{horas}:{minutos}:{segundos}")
+        client.publish(MQTT_TOPIC_SEND, pedido)
+        print("Datetime enviado!")
 
 # Configuração do cliente MQTT
 client = mqtt.Client("ClienteID")
@@ -27,5 +28,7 @@ client.on_message = on_message
 client.connect(MQTT_BROKER)
 client.subscribe(MQTT_TOPIC_RECEIVE)
 
-print("Servidor de horas rodando...")
-client.loop_forever()
+print("Esperando mensagens...")
+
+while True:
+    client.loop(timeout=0.1)
