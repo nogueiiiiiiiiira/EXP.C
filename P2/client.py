@@ -7,18 +7,20 @@ MQTT_TOPIC_RECEIVE = "exp.criativa/espparapc2025"
 
 # Callback executado quando uma mensagem MQTT é recebida
 def on_message(client, userdata, msg):
-    current_datetime = datetime.now()
-    horas = (current_datetime.hour)
-    minutos = (current_datetime.minute)
-    segundos = (current_datetime.second)
+    data_hora = datetime.now()
+    horas = data_hora.hour
+    minutos = data_hora.minute
+
+    ang_hora = horas * 7
+    ang_minuto = minutos * 7
 
     mensagem = msg.payload.decode()
-    print(f"Mensagem recebida no tópico")
+    print(f"Mensagem recebida: {mensagem}")
     
-    if mensagem == "hora":        
-        pedido = (f"{horas}:{minutos}:{segundos}")
+    if mensagem == "hora":
+        pedido = f"HORA={ang_hora};MINUTO={ang_minuto}"
         client.publish(MQTT_TOPIC_SEND, pedido)
-        print("Datetime enviado!")
+        print("Angulos enviados:", pedido)
 
 # Configuração do cliente MQTT
 client = mqtt.Client("ClienteID")
