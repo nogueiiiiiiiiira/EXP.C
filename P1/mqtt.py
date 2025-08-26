@@ -71,19 +71,12 @@ while not parar:
 
 print("\nParando leituras. Ligando LED e buzzer...")
 
-led.value(1)
-sleep(0.5)
-led.value(0)
-sleep(0.5)
-led.value(1)
-sleep(0.5)
-led.value(0)
-sleep(0.5)
-led.value(1)
-sleep(0.5)
-led.value(0)
-sleep(0.5)
-
+for i in range(3):
+        led.value(1)
+        sleep(0.5)
+        led.value(0)
+        sleep(0.5)
+    
 buzzer.freq(500)
 buzzer.duty(500)
 sleep(2)
