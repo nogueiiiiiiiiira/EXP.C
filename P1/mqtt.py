@@ -1,3 +1,4 @@
+import machine
 from machine import Pin, PWM
 import network
 from time import sleep
@@ -5,11 +6,9 @@ from umqtt.simple import MQTTClient
 from hcsr04 import HCSR04
 
 led = Pin(2, Pin.OUT)
-buzzer = PWM(Pin(15))
-buzzer.duty(0)
 sensor = HCSR04(trigger_pin=5, echo_pin=18, echo_timeout_us=10000)
 parar = False
-
+buzzer = PWM(machine.Pin(15))
 distancia_antiga = sensor.distance_cm()
 
 # Configuração MQTT 
@@ -75,12 +74,13 @@ for i in range(3):
         led.value(1)
         sleep(0.5)
         led.value(0)
+        buzzer.freq(100)
+        buzzer.duty(512)
+        sleep(0.5)
+        buzzer.duty(0)
         sleep(0.5)
     
-buzzer.freq(500)
-buzzer.duty(500)
-sleep(2)
-buzzer.duty(0)
-
 client.disconnect()
 print("\nCódigo encerrado")
+
+
