@@ -18,7 +18,7 @@ def on_message(client, userdata, msg):
     print(f"Mensagem recebida: {mensagem}")
     
     if mensagem == "hora":
-        pedido = f"HORA={ang_hora};MINUTO={ang_minuto}"
+        pedido = f"HORA = {ang_hora}; MINUTO = {ang_minuto}"
         client.publish(MQTT_TOPIC_SEND, pedido)
         print("Angulos enviados:", pedido)
 
