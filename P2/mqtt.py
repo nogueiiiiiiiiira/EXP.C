@@ -14,13 +14,13 @@ def definir_angulo(angulo):
     servo.duty(duty)
 
 # Configuração MQTT 
-MQTT_CLIENT_ID = "ESP32_Client"
+MQTT_CLIENT_ID = "ClientID"
 MQTT_BROKER = "broker.mqttdashboard.com"
 MQTT_TOPIC_SEND = "exp.criativa/espparapc2025"  
 MQTT_TOPIC_RECEIVE = "exp.criativa/pcparaesp2025" 
 
 # Configuração da rede Wi-Fi
-WIFI_SSID = "Wokwi-GUEST"
+WIFI_SSID = "Visitantes"
 WIFI_PASS = ""
 
 wifi = network.WLAN(network.STA_IF)
@@ -33,12 +33,12 @@ print("Conectado ao Wi-Fi!")
 # Função de callback para recebimento de mensagens MQTT
 def callback(topic, msg):
     mensagem = msg.decode()
-    print("Mensagem recebida:", mensagem)
+    print("\nMensagem recebida:", mensagem)
 
     try:
-        dados = dict(item.split("=") for item in mensagem.split(";"))
+        dados = dict(item.split(" = ") for item in mensagem.split(";"))
         ang_hora = int(dados["HORA"])
-        ang_minuto = int(dados["MINUTO"])
+        ang_minuto = int(dados[" MINUTO"])
 
         # Movimento
         definir_angulo(ang_hora)
@@ -63,6 +63,6 @@ print("Conectado ao broker!")
 while True:
     client.check_msg()
     if not button.value():
-        print("Botão pressionado! Solicitando hora...")
+        print("\nBotão pressionado! Solicitando hora...")
         client.publish(MQTT_TOPIC_SEND, "hora")
         sleep(0.5)
