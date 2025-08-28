@@ -2,16 +2,10 @@ from machine import Pin, PWM
 from time import sleep
 import network
 from umqtt.simple import MQTTClient
+from servo import Servo
 
 button = Pin(12, Pin.IN, Pin.PULL_UP) 
-servo = PWM(Pin(13), freq=50)        
-
-duty_min = 26   
-duty_max = 128 
-
-def definir_angulo(angulo):
-    duty = int(duty_min + (angulo / 180) * (duty_max - duty_min))
-    servo.duty(duty)
+servo = Servo(pin = 18) 
 
 # Configuração MQTT 
 MQTT_CLIENT_ID = "ClientID"
@@ -20,7 +14,7 @@ MQTT_TOPIC_SEND = "exp.criativa/espparapc2025"
 MQTT_TOPIC_RECEIVE = "exp.criativa/pcparaesp2025" 
 
 # Configuração da rede Wi-Fi
-WIFI_SSID = "Visitantes"
+WIFI_SSID = "Wokwi-GUEST"
 WIFI_PASS = ""
 
 wifi = network.WLAN(network.STA_IF)
@@ -41,11 +35,11 @@ def callback(topic, msg):
         ang_minuto = int(dados[" MINUTO"])
 
         # Movimento
-        definir_angulo(ang_hora)
+        servo.move(ang_hora)
         sleep(5)
-        definir_angulo(ang_minuto)
+        servo.move(ang_minuto)
         sleep(5)
-        definir_angulo(0)
+        servo.move(180)
 
     except Exception as e:
         print("Erro no processamento:", e)
